@@ -1,0 +1,179 @@
+/* List View Container Styles */
+.task-list-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 8px;
+}
+
+/* List Header Styles */
+.task-list-header {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    background-color: #f5f7fb;
+    border-radius: 8px;
+    margin-bottom: 4px;
+}
+
+.task-selection-header {
+    margin-right: 12px;
+}
+
+.task-count {
+    font-size: 14px;
+    color: #666;
+    font-weight: 500;
+}
+
+/* List Item Styles */
+.task-list-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.task-list-item:hover {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    background-color: #f9fafd;
+}
+
+.task-list-item-hover {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    background-color: #f9fafd;
+}
+
+/* Hide checkboxes and delete icons by default */
+.task-list-item .task-checkbox-wrapper,
+.task-list-item .delete-icon {
+    visibility: hidden;
+}
+
+/* Show on hover */
+.task-list-item:hover .task-checkbox-wrapper,
+.task-list-item:hover .delete-icon,
+.task-list-item-hover .task-checkbox-wrapper,
+.task-list-item-hover .delete-icon {
+    visibility: visible;
+}
+
+/* Task Content Styles */
+.task-list-content {
+    margin-left: 12px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.task-list-primary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.task-list-title {
+    font-weight: 600;
+    font-size: 15px;
+    color: #222;
+}
+
+.task-list-indicators {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.task-list-secondary {
+    font-size: 12px;
+    color: #666;
+    margin-top: 2px;
+}
+
+.task-list-date {
+    font-weight: 400;
+}
+
+/* Bulk Action Bar */
+.bulk-action-bar {
+    display: none; /* Hidden by default */
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+    margin-bottom: 16px;
+}
+
+.bulk-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.bulk-action-btn {
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.2s;
+}
+
+.bulk-action-btn.select-all-btn {
+    background-color: #f0f0f0;
+}
+
+.bulk-action-btn.cancel-btn {
+    background-color: #f0f0f0;
+}
+
+.bulk-action-btn.delete-btn {
+    background-color: #ff4d4f;
+    color: white;
+}
+
+.bulk-action-btn:hover {
+    filter: brightness(0.95);
+}
+
+/* Status and Priority Indicators - Reuse existing styles */
+.task-list-item .status-badge {
+    height: 22px;
+    width: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.task-list-item .priority-flag {
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+.task-list-item .priority-flag span:last-child {
+    display: none; /* Hide the priority text, just show the icon */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .task-list-item {
+        padding: 10px 12px;
+    }
+    
+    .task-list-title {
+        font-size: 14px;
+    }
+    
+    .task-list-secondary {
+        font-size: 11px;
+    }
+}

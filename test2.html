@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tagify Test</title>
+    <link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <input name="tags">
+
+    <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            var inputElm = document.querySelector('input[name=tags]');
+            new Tagify(inputElm);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1436 @@
+ /* For blurring and disabling all the things in background when any modal is opened? */
+
+ .global-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    display: none;
+    backdrop-filter: blur(8px);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Container for sidebar and main content */
+.main-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f8f9fa;
+}
+
+/* Sidebar styles */
+.sidebar {
+    width: 250px;
+    flex-shrink:0;
+    background-color: white;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Main content area */
+/* .content-area {
+    flex: 1;
+    padding: 20px;
+} */
+
+/* ################################### */
+/* Updated code for task selection */
+.content-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    transition: width 0.3s ease;
+}
+
+/* Greet user*/
+#greet_user {
+    margin-bottom: 1.5rem;
+}
+
+/* ################################### */
+
+/* Search bar styling */
+.search-container {
+    width: 100%;
+}
+
+.search-container input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* Sort dropdown styling */
+.sort-container select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: white;
+}
+
+/* 
+App container css for 
+*/
+
+/* New css */
+body {
+    font-family: 'Inter',sans-serif;
+}
+
+.app-container {
+    display: flex;
+    position: relative;
+    width: 100%;
+    transition: margin-right 0.3s ease;
+}
+
+.app-container.filter-active {
+    /* margin-right: 320px; */
+    padding-right:320px;
+}
+
+.app-container.filter-active .task-container {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}
+
+/* Filter related css */
+/* Filter Button in Sidebar */
+
+
+.sidebar-filter-btn {
+    width: 100%;
+    padding: 12px;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    transition: all 0.2s ease;
+}
+
+.sidebar-filter-btn:hover {
+    background: #f5f5f5;
+}
+
+/* Filter Panel */
+.filter-panel {
+    position: fixed;
+    right: -320px; /* Start off-screen */
+    top: 0;
+    width: 320px;
+    height: 100vh;
+    background: #fff;
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+    transition: right 0.3s ease;
+    z-index: 1000;
+}
+
+.filter-panel.active {
+    right: 0;
+}
+
+.filter-panel-content {
+    /* padding: 24px; */
+    padding: 1.5rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.filter-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.filter-panel-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.close-filter-panel {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 4px;
+}
+
+/* Filter Sections */
+.filter-sections {
+    flex-grow: 1;
+    overflow-y: auto;
+    margin-bottom: 1.75rem; 
+    padding-bottom: 1.25rem;
+}
+
+.filter-section {
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.filter-section h4 {
+    margin: 0 0 16px 0;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #666;
+}
+
+/* Radio Buttons */
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    /* gap: 12px; */
+    gap:0.75rem;
+}
+
+.radio-label {
+    display: flex;
+    align-items: center;
+    /* gap: 8px; */
+    gap:0.75rem;
+    padding: 0.75rem;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 6px;
+    transition: background 0.2s ease;
+}
+
+.radio-label:hover {
+    background: #f5f5f5;
+}
+
+.radio-label input[type="radio"] {
+    display: none;
+}
+
+.radio-custom {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #ddd;
+    border-radius: 50%;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.radio-label input[type="radio"]:checked + .radio-custom {
+    border-color: #007bff;
+}
+
+.radio-label input[type="radio"]:checked + .radio-custom::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    background: #007bff;
+    border-radius: 50%;
+}
+
+/* Filter Actions */
+.filter-actions {
+    padding-top: 16px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.clear-filters {
+    width: 100%;
+    padding: 12px;
+    background: #f5f5f5;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.clear-filters:hover {
+    background: #e0e0e0;
+}
+
+
+/* Add task button in sidebar */
+.sidebar-add-task {
+    background-color: #2563eb;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.sidebar-add-task:hover {
+    background-color: #1d4ed8;
+}
+
+.back-to-home {
+    background-color: #2563eb;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.back-to-home:hover {
+    background-color: #1d4ed8;
+}
+
+#home-page {
+    min-height: 100vh;
+    /* background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), */
+    /* url('./Martian_sukoon.png') center/cover no-repeat; */
+    /* url('https://source.unsplash.com/random/1920x1080') center/cover no-repeat; */
+
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+        /* url('https://www.istockphoto.com/photo/man-on-the-mountain-top-watch-the-sunset-of-2024-and-the-sunrise-of-the-new-year-2025-gm2189197706-607671883?utm_campaign=srp_photos_bottom&utm_content=https%3A%2F%2Funsplash.com%2Fs%2Fphotos%2Fto-dolist-landscape-picture&utm_medium=affiliate&utm_source=unsplash&utm_term=to+dolist+landscape+picture%3A%3A%3A') center/cover no-repeat; */
+        url('https://picsum.photos/id/180/1920/1080') center/cover no-repeat;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.auth-container {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 400px;
+    padding: 2.5rem;
+    margin: 0 auto;
+}
+
+.title {
+    color: white;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+
+.auth-container h2 {
+    color: #1a1a1a;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+#user-data {
+    margin-bottom: 1.5rem;
+}
+
+.input-group {
+    margin-bottom: 1.25rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #4a4a4a;
+    font-weight: 500;
+}
+
+input[type="text"],
+input[type="email"] {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.2s;
+}
+
+input:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+#submitBtn {
+    width: 100%;
+    padding: 0.75rem;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+#submitBtn:hover {
+    background: #1d4ed8;
+}
+
+/* User Selection */
+.select-user-btn {
+    width: 100%;
+    padding: 0.75rem;
+    background: white;
+    color: #2563eb;
+    border: 2px solid #2563eb;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 1rem;
+}
+
+.select-user-btn:hover {
+    background: rgba(37, 99, 235, 0.1);
+}
+
+.user-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+}
+
+.user-modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-modal-content {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    width: 90%;
+    max-width: 400px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.user-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.user-modal-header h2 {
+    color: #1a1a1a;
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+.close-user-modal {
+    background: none;
+    border: none;
+    font-size: 1.75rem;
+    cursor: pointer;
+    color: #666;
+    padding: 0.5rem;
+    line-height: 1;
+}
+
+.user-list {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.user-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.user-item:hover {
+    background: #f8f9ff;
+    border-color: #2563eb;
+    transform: translateY(-2px);
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    background: #2563eb;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.user-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.user-info .name {
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 0.25rem;
+}
+
+.user-info .email {
+    font-size: 0.875rem;
+    color: #666;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.no-users-message {
+    text-align: center;
+    color: #666;
+    margin: 2rem 0;
+    font-size: 1rem;
+}
+
+#user-dropdown {
+    display: none;
+}
+
+@media (max-width: 640px) {
+    .title {
+        font-size: 2rem;
+    }
+
+    .auth-container {
+        padding: 1.5rem;
+    }
+
+    .user-modal-content {
+        width: 95%;
+        padding: 1.5rem;
+    }
+}
+
+/* Modal base styling */
+#task-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+}
+
+#task-modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-body {
+    padding: 1rem;
+}
+
+.modal-content {
+    background: white;
+    width: 90%;
+    max-width: 600px;
+    margin: 2% auto;
+    /* padding: 2rem; */
+    padding: 2.5rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #f1f5f9;
+}
+
+.modal-header h2 {
+    font-size: 1.5rem;
+    color: #0f172a;
+    font-weight: 600;
+}
+
+#close-modal {
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 50%;
+    background: #f1f5f9;
+    color: #64748b;
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#close-modal:hover {
+    background: #e2e8f0;
+    color: #0f172a;
+}
+
+/* Form styling */
+#task-form {
+    max-height: 70vh;
+    overflow-y: auto;
+    /* padding: 10px; */
+    padding: 1.25rem;
+}
+
+/* Input groups */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    /* added */
+    margin-bottom: 1.5rem;
+    /* gap: 0.5rem; */
+}
+
+.input-group label {
+    font-weight: 500;
+    color: #334155;
+    font-size: 0.95rem;
+}
+
+#task-form input[type="text"],
+#task-form textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.2s;
+    background: #f8fafc;
+}
+
+#task-form input[type="text"]:focus,
+#task-form textarea:focus {
+    border-color: #3b82f6;
+    background: white;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+#task-form textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+/* Select wrapper for custom styling */
+.select-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+/* Select inputs */
+#modal-status,
+#modal-priority {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: #f8fafc;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1.25rem;
+    padding-right: 2.5rem;
+}
+
+/* Status colors */
+#modal-status option[vlaue="not started"] {
+    color: #64748b;
+}
+
+#modal-status option[value="in progress"] {
+    color: #0284c7;
+}
+
+#modal-status option[value="completed"] {
+    color: #16a34a;
+}
+
+/* Priority colors */
+#modal-priority option[value="high"] {
+    color: #dc2626;
+}
+
+#modal-priority option[value="medium"] {
+    color: #d97706;
+}
+
+#modal-priority option[value="low"] {
+    color: #2563eb;
+}
+
+/* Add some spacing for the icons */
+#modal-status option,
+#modal-priority option {
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#save-task {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#save-task:hover {
+    background-color: #45a049;
+}
+
+/* Task list styling */
+/* #task-display {
+    margin-top: 20px;
+}
+
+#task-display ol {
+    padding: 0;
+}
+
+#task-display li {
+    padding: 12px 15px;
+    margin-bottom: 8px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#task-display li:hover {
+    background-color: #e9ecef;
+    transform: translateX(5px);
+} */
+
+/* Task card styling */
+/* Task card styling */
+/* .task-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+    padding: 1.25rem;
+} */
+
+/* Updated code */
+.task-container {
+    display: grid;
+    gap: 1rem;
+    width:100%;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    /* grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); */
+}
+
+
+.task-card {
+    background: white;
+    border-radius: 0.75rem;
+    /* padding: 1rem; */
+    padding:1.5rem;
+    margin-bottom: 1rem;
+
+    border: 1px solid #e2e8f0;
+    /* box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15); 
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+}
+
+.task-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Delete functionality related css.*/
+
+.task-card {
+    position: relative;
+    /* For absolute positioning of selection overlay */
+    /* ... your existing task-card styles ... */
+}
+
+.task-selection {
+    display: none;
+    /* Hidden by default */
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 10;
+}
+
+/* Show task-selection on hover */
+.task-card:hover .task-selection {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem;
+}
+
+.task-checkbox-wrapper {
+    position: absolute;
+    left: -12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    z-index: 11;
+    opacity: 0; /* Hidden by default */
+    transition: opacity 0.2s ease; /* Smooth transition */
+}
+
+/* Always show checkbox when in selection-mode */
+.selection-mode .task-checkbox-wrapper {
+    opacity: 1;
+    /* pointer-events: auto; */
+}
+
+.task-checkbox {
+    /* position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    z-index: 12; */
+    /* Make sure it's clickable */
+
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 12;
+    cursor: pointer;
+}
+
+/* Show checkbox when card is hovered or checkbox is checked */
+.task-card:hover .task-checkbox,
+.task-checkbox:checked {
+    opacity: 1;
+}
+
+.checkbox-custom {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: white;
+    border: 2px solid #e1e1e1;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    /* Hidden by default */
+}
+
+/* Show custom checkbox on hover or when real checkbox is checked */
+.task-card:hover .checkbox-custom,
+.task-checkbox:checked+.checkbox-custom {
+    opacity: 1;
+}
+
+.task-checkbox:checked+.checkbox-custom::after {
+    content: "✓";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #007bff;
+    font-size: 16px;
+}
+
+/* For showing checkbox all the time, when one checkbox is selected, not on hovering on any task */
+.task-card.selection-active .task-selection {
+    display: flex !important;
+}
+
+/* For showing unchecked checkboxes, when a checkbox is marked */
+/* Ensure task-selection is visible in selection mode */
+.selection-mode .task-selection {
+    display: flex !important;
+    opacity: 1 !important;
+    /* align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem; */
+}
+
+/* Hide delete icon when in selection mode */
+.selection-mode .delete-icon {
+    display: none !important;
+}
+
+/* Updating delete-icon position and size */
+.delete-icon {
+    position: absolute;
+    right: 0.75rem;
+    top: 1.25rem;
+    font-size: 8px; /* Further reduced size */
+    opacity: 0;
+    cursor: pointer;
+    padding: 1px; /* Even less padding */
+    border-radius: 4px;
+    z-index: 11;
+    color: #64748b; /* Keep the original color */
+    transition: opacity 0.2s ease;
+}
+
+/* Ensure delete icon shows on hover when not in selection mode */
+body:not(.selection-mode) .task-card:hover .delete-icon{
+    opacity:1;
+}
+
+/* Show checkbox on hover when not in selection-mode */
+body:not(.selection-mode) .task-card:hover .task-checkbox-wrapper {
+    opacity: 1;
+}
+
+/* Show delete icon on hover */
+.task-card:hover .delete-icon {
+    opacity: 1;
+}
+
+.delete-icon:hover {
+    /* background-color: rgba(239, 68, 68, 0.1);  /* Softer red background */
+    /* color: #ef4444;  Red on hover */ 
+    /* box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); */
+    background-color: rgba(209, 213, 219, 0.3); /* Lighter gray, more subtle */
+    color: #1f2937; /* Darker gray/almost black on hover */
+    /* Optional: Add a very subtle border on hover */
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Ensure delete icon shows properly after selection mode */
+.task-card:not(.selection-mode) .delete-icon {
+    position: absolute;
+    right: 0.75rem;
+    top: 0.75rem;
+    transform: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.task-card:not(.selection-mode):hover .delete-icon {
+    opacity: 1;
+}
+
+/* Delete functionality related css completed. */
+
+/* Delete Modal Styling */
+
+.delete-modal-content {
+    position: fixed;
+    top: 50%;
+    /* top: 55%; */
+    left: 50%;
+    /* left: 51%; */
+    transform: translate(-50%, -50%);
+    background: white;
+    border-radius: 16px;
+    /* Reduced padding for more compact look */
+    padding: 1.5rem;
+    /* Reduced width for more focused appearrance */
+    width: 90%;
+    /* width: 80%; */
+    max-width: 600px;
+    /* max-width: 500px; */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1001;
+    /* Ensure it's on top of other elements */
+    backdrop-filter: blur(4px);
+    display: flex;
+    flex-direction:column;
+    gap: 1.5rem;
+} 
+
+/* Modal button container fix -- Added later.*/
+/* .delete-modal-content {
+    display: flex;
+    flex-direction:column;
+    gap: 1.5rem;
+} */
+
+.delete-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+    /* margin-top: 0.5rem; */
+}
+
+.delete-modal-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #eee;
+}
+
+.delete-modal-header h2 {
+    color: #1a1a1a;
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+.delete-modal-body {
+    text-align: center;
+    margin-bottom:0.75 rem;
+}
+
+.delete-modal-body h2 {
+    color: #333;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.modal-cancel-btn,
+.modal-delete-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.modal-cancel-btn {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.modal-cancel-btn:hover {
+    background-color: #e0e0e0;
+    transform: scale(1.02);
+}
+
+.modal-delete-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.modal-delete-btn:hover {
+    background-color: #c82333;
+    transform: scale(1.02);
+}
+
+.modal-delete-btn:active,
+.modal-cancel-btn:active {
+    transform: scale(0.98);
+}
+
+/* End of Delete Modal related css */
+
+/* Selection bar css */
+.selection-bar {
+    position: relative;
+    width: 100%;
+    background-color: white;
+    padding: 1rem;
+    border-bottom: 1px solid #e1e1e1;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1.5rem;
+}
+
+.selection-info {
+    font-weight: 500;
+}
+
+.selection-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.selection-actions button {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.select-all-btn,
+.cancel-selection-btn {
+    background-color: #f0f0f0;
+}
+
+.delete-selected-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.delete-selected-btn:hover {
+    background-color: #c82333;
+}
+
+/* End of selection bar css */
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    /* Added top margin to create space for delete icon */
+    margin-top:0.5rem;
+    /* margin-bottom: 0.75rem; */
+    margin-bottom: 1rem;
+}
+
+.task-title {
+    font-weight: 600;
+    /* font-size: 0.875rem; */
+    font-size:1rem;
+    color: #1a202c;
+    margin: 0;
+    padding-right: 0.5rem;
+    flex: 1;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.status-priority {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    /* Ensure priority text doesn't overlap with delete icon */
+    padding-right: 1.75rem;
+}
+
+.priority-flag {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    border-radius: 12px;
+    /* font-size: 14px; */
+    font-size:0.75rem;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Color variants based on priority */
+.priority-flag[data-priority="high"] {
+    background: rgba(255, 0, 0, 0.08);
+}
+
+.priority-flag[data-priority="medium"] {
+    background: rgba(255, 193, 7, 0.15);
+}
+
+.priority-flag[data-priority="low"] {
+    background: rgba(33, 150, 243, 0.08);
+}
+
+/* Status badge - keep the original selectors */
+/* .status-badge {
+    font-size: 16px;
+    display: inline-flex;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    transition: none;
+    
+} */
+.status-badge {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+}
+
+.status-badge[data-status="completed"] {
+    color: #166534;
+}
+
+.status-badge[data-status="in-progress"] {
+    color: #075985;
+}
+
+.status-badge[data-status="not-started"] {
+    color: #475569;
+}
+
+.priority-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.375rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    transition: none;
+    /* Remove transition */
+}
+
+.priority-indicator[data-priority="high"] {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.priority-indicator[data-priority="medium"] {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.priority-indicator[data-priority="low"] {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* margin-top: 1rem; */
+    margin-top:1.25rem;
+}
+
+.card-footer, .status-priority { 
+    font-size: 0.875rem; 
+}
+
+/* Tag Modal Styling */
+/* Tag Modal Base Styling */
+/* tag-modal.css */
+
+.tag-modal-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 500px;
+    /* padding: 1.5rem; */
+    padding: 2rem;
+}
+
+.tag-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.tag-chips-container {
+    /* Styles for the container of tag chips */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    /* gap: 0.5rem; */
+    margin-bottom: 1rem;
+    min-height: 2.5rem;
+    /* Ensure there's some initial space */
+}
+
+.task-tag {
+    /* Styles for individual tag chips */
+    display: inline-block;
+    background-color: #f0f4ff;
+    color: #2563eb;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+    position: relative;
+    /* For the remove button */
+}
+
+.task-tag .remove-tag {
+    margin-left: 0.5rem;
+    cursor: pointer;
+    color: #ff4444;
+}
+
+/* Error Handling */
+.tag-error-container {
+    background-color: #ffdddd;
+    border: 1px solid #ff4444;
+    color: #ff4444;
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+    border-radius: 0.25rem;
+}
+
+/* If needed target the span inside */
+/* .tag-modal-container .tagify .tagify__input--outside{
+    height: 100%;
+    width: 100%;
+} */
+
+/* .tag-modal-container .tagify {
+    width: 100%;
+} */
+
+.tagify {
+    width: 100%;
+}
+
+
+
+/* Tag related code above */
+
+/* Reminder button css */
+.reminder-btn {
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #6B7280;
+}
+
+.reminder-btn:hover {
+    background: #f1f5f9;
+}
+
+.reminder-btn[data-has-reminder="true"] {
+    color: #2563eb;
+}
+
+/*Add Task button styling */
+#open-task-modal {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+#open-task-modal:hover {
+    background-color: #0056b3;
+}
+
+.error-message {
+    color: #dc3545;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 4px;
+    background-color: #f8d7da;
+}
+
+.success-message {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #d4edda;
+    color: #155724;
+    padding: 15px;
+    border-radius: 4px;
+}
+
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+/* Add this to ensure the task display area works with cards */
+#task-display {
+    flex:1;
+    /* width: 100%; */
+    padding: 1rem;
+    margin-top: 0;
+    padding-top: 0;
+}
+
+/* Adjust task container for task display specific needs */
+#task-display .task-container {
+    width: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .task-container {
+        grid-template-columns: 1fr;
+        /* Single column on mobile */
+    }
+}

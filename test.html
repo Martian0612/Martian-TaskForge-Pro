@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Unit Test Runner</title>
+    <style>
+        .test-result { margin-bottom: 10px; padding: 8px; border: 1px solid #ccc; }
+        .pass { background-color: #e6ffe6; color: green; }
+        .fail { background-color: #ffe6e6; color: red; }
+    </style>
+</head>
+<body>
+    <h1>Unit Test Results</h1>
+    <div id="test-results"></div>
+
+    <script type="module" src="indexedDB-storage.js"></script>
+    <script type="module" src="notification-manager.js"></script>
+    <script type="module" src="test-indexedDB.js"></script>
+    <script type="module" src="test-notification-manager.js"></script>
+
+    <script type="module">
+        import { testIndexedDB } from './test-indexedDB.js';
+        import { testNotificationManager } from './test-notification-manager.js';
+
+        const testResultsDiv = document.getElementById('test-results');
+
+        async function runTest(testName, testFunction) {
+            const resultDiv = document.createElement('div');
+            resultDiv.textContent = `Running: ${testName}... `;
+            testResultsDiv.appendChild(resultDiv);
+
+            try {
+                await testFunction();
+                resultDiv.textContent += 'PASS';
+                resultDiv.style.backgroundColor = '#e6ffe6';
+                resultDiv.style.color = 'green';
+                console.log(`Test "${testName}" passed.`);
+            } catch (error) {
+                resultDiv.textContent += 'FAIL: ' + error.message;
+                resultDiv.style.backgroundColor = '#ffe6e6';
+                resultDiv.style.color = 'red';
+                console.error(`Test "${testName}" failed:`, error);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log('Starting tests...');
+            await runTest('IndexedDB Tests', testIndexedDB);
+            await runTest('NotificationManager Tests', testNotificationManager);
+            console.log('All tests finished.');
+        });
+    </script>
+</body>
+</html>
